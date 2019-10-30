@@ -7,7 +7,7 @@ return [
     'hey',
     'hi',
     'mornin',
-    'mornin\'',	
+    'mornin\'',
     'morning',
     'good morning',
 ];

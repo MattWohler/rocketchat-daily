@@ -13,7 +13,8 @@ class SendGroupMessageCommand extends Command
     /** @var string */
     protected $signature = 'rc:send-message 
                             {groupname : The name of the group}
-                            {--message= : The message to post}';
+                            {--message= : The message to post}
+                            {--random : send random message instead}';
 
     /** @var string */
     protected $description = 'Send a message to a specified Rocket Chat group.';
@@ -22,6 +23,10 @@ class SendGroupMessageCommand extends Command
     {
         $groupName = $this->argument('groupname');
         $message = $this->option('message');
+
+        if ($this->hasOption('random')) {
+            $message = collect(config('greetings'))->random();
+        }
 
         throw_unless(
             $message, new RuntimeException('A message is required.')
@@ -32,10 +37,15 @@ class SendGroupMessageCommand extends Command
             new RuntimeException("Group: '$groupName' does not exist.")
         );
 
-        $group = new Group($groupName);
-        $group->postMessage($message);
+        (new Group($groupName))->postMessage($message);
 
-        $this->info("Group: {$group}");
-        $this->info("Message: {$message}");
+        $this->logInfo("Group: {$groupName}");
+        $this->logInfo("Message: {$message}");
+    }
+
+    private function logInfo(string $message): void
+    {
+        $this->info($message);
+        \Log::info($message);
     }
 }

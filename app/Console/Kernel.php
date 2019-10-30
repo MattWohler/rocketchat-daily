@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\SendGroupMessageCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +14,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\SendGroupMessageCommand::class,
+        SendGroupMessageCommand::class,
     ];
 
     /**
@@ -24,18 +25,14 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command(
-            SendGroupMessageCommand::class, [
-                'development', 
-                sprintf('--message=%s', collect(config('greetings'))->random())
-            ])->weekdays()
-              ->at('09:02');
+        $schedule
+            ->command(SendGroupMessageCommand::class, ['development', '--random'])
+            ->weekdays()
+            ->at('09:02');
 
-        $schedule->command(
-            SendGroupMessageCommand::class, [
-                'programmers', 
-                sprintf('--message=%s', collect(config('greetings'))->random())
-            ])->weekdays()
-              ->at('09:03');
+        $schedule
+            ->command(SendGroupMessageCommand::class, ['programmers', '--random'])
+            ->weekdays()
+            ->at('09:03');
     }
 }
