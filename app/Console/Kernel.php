@@ -28,11 +28,11 @@ class Kernel extends ConsoleKernel
         $schedule
             ->command(SendGroupMessageCommand::class, ['development', '--random'])
             ->weekdays()
-            ->at('09:02');
+            ->at('08:02');
 
         $schedule
             ->command(SendGroupMessageCommand::class, ['programmers', '--random'])
             ->weekdays()
-            ->at('09:03');
+            ->at('08:03');
     }
 }
